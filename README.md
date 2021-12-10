@@ -54,8 +54,7 @@ Point your browser to http://localhost:8080
 ### Note for non-pythonists
 A virtualenv is a python sandbox, where you can install packages in isolation
 from the global python installation.<br>
-To run the server and tests, you will create a virtualenv, then activate it
-(==work inside it) and then run server and tests.<br>
+To run the server and tests, you will create a virtualenv, and the scripts that run the server and the tests are aware of the virtualenv and will use it (you don't need to do this yourself).<br>
 Pipenv is a helpful tool - a python package that helps manage virtualenvs.<br>
 
 ### Install Python, virtualenv and Pipenv
