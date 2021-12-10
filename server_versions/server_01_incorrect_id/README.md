@@ -17,9 +17,9 @@ pre span{
 </style> -->
 
 <pre>
-<span style="font-weight:bold;">
+<b>
 &gt;       assert len(book_list_from_server) == self.book_count
-E       AssertionError: assert 1 == 2</span>
+E       AssertionError: assert 1 == 2</b>
 E        +  where 1 = len([{'author': 'a', 'id': 'a', 'read': False, 'title': 'a'}])
 E        +  and   2 = MySrvTestHttp({}).book_count
 tests/test_srv.py:77: AssertionError
