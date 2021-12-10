@@ -9,15 +9,15 @@ See `src/app.py:_book_from_post_data()`.
 The output of the of the test will end with something that looks like this
 (the interesting parts are in <span style="color:red;">**bold red**</span>)
 
-<style>
+<!-- <style>
 pre span{
     color:red;
     font-weight:bold;
 }
-</style>
+</style> -->
 
 <pre>
-<span>
+<span style="font-weight:bold;">
 &gt;       assert len(book_list_from_server) == self.book_count
 E       AssertionError: assert 1 == 2</span>
 E        +  where 1 = len([{'author': 'a', 'id': 'a', 'read': False, 'title': 'a'}])
