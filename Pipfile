@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-xdist = "*"
+pytest-watch = "*"
+mock = "*"
+hypothesis = "*"
+
+[packages]
+Flask = "==1.0.2"
+Flask-Cors = "==3.0.7"
+requests = "*"
+
+
+[requires]
+python_version = "3.9"
