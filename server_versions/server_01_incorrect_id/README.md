@@ -18,8 +18,9 @@ pre span{
 
 <pre>
 <b><i>
-&gt;       assert len(book_list_from_server) == self.book_count
-E       AssertionError: assert 1 == 2</i></b>
+ &gt;       assert len(book_list_from_server) == self.book_count
+ E       AssertionError: assert 1 == 2</i></b>
+
 E        +  where 1 = len([{'author': 'a', 'id': 'a', 'read': False, 'title': 'a'}])
 E        +  and   2 = MySrvTestHttp({}).book_count
 tests/test_srv.py:77: AssertionError
@@ -27,9 +28,11 @@ tests/test_srv.py:77: AssertionError
 Falsifying example:
 state = MySrvTestHttp()
 state.init_test()
-<b><i>state.new_book(book_data=BookData(title='a', author='a'))
-state.new_book(book_data=BookData(title='a', author='a'))
-state.list_books()</i></b>
+
+ <b><i>state.new_book(book_data=BookData(title='a', author='a'))
+ state.new_book(book_data=BookData(title='a', author='a'))
+ state.list_books()</i></b>
+
 state.teardown()
 ================================ short test summary info ================================
 FAILED tests/test_srv.py::TestMySrvTest::runTest - AssertionError: assert 1 == 2
