@@ -96,8 +96,12 @@ def _add_book(post_data, _id=None):
 
 def _book_from_post_data(post_data, _id=None):
     if not _id:
-        # _id = uuid.uuid4().hex
+        # THIS IS A BUG: we use the book's title as the id, instead of generating
+        # a new unique id for each book.
+        # This mean that when the user creates a book with a title that is the same
+        # as the title of an existing book, the new book will override the old book.
         _id = post_data.get('title')
+        # _id = uuid.uuid4().hex
     return _mk_book(
         _id=_id,
         title=post_data.get('title'),
