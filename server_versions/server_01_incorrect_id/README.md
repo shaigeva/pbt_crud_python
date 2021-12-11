@@ -9,13 +9,6 @@ See `src/app.py:_book_from_post_data()`.
 The output of the of the test will end with something that looks like this
 (the interesting parts are in ***bold italic***)
 
-<!-- <style>
-pre span{
-    color:red;
-    font-weight:bold;
-}
-</style> -->
-
 <pre>
 <b><i>
  &gt;       assert len(book_list_from_server) == self.book_count
