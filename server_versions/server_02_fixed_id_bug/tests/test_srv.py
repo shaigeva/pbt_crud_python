@@ -1,14 +1,9 @@
 from dataclasses import dataclass
+
+import hypothesis.strategies as some
 import requests
-
-
 from hypothesis import settings
-from hypothesis import settings, Phase
-import hypothesis.strategies as some
-from hypothesis import settings
-import hypothesis.strategies as some
-from hypothesis.stateful import RuleBasedStateMachine, rule, initialize
-
+from hypothesis.stateful import RuleBasedStateMachine, initialize, rule
 
 ####################################################################################
 # hypothesis strategies:
