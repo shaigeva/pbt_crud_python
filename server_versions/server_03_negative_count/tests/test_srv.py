@@ -1,14 +1,9 @@
 from dataclasses import dataclass
+
+import hypothesis.strategies as some
 import requests
-
-
 from hypothesis import settings
-from hypothesis import settings, Phase
-import hypothesis.strategies as some
-from hypothesis import settings
-import hypothesis.strategies as some
-from hypothesis.stateful import RuleBasedStateMachine, rule, initialize
-
+from hypothesis.stateful import Bundle, RuleBasedStateMachine, initialize, rule
 
 ####################################################################################
 # hypothesis strategies:
@@ -33,6 +28,14 @@ class BookData(object):
 ####################################################################################
 # Test model
 class MySrvTestHttp(RuleBasedStateMachine):
+
+    # This is a Hypothesis "Bundle".
+    # It is a tool that helps manage data that needs to be created by some
+    # action and used by others.
+    # This specific usage maintains the id-s of books that have been created
+    # by the new_book action (@rule).
+    created_books = Bundle("books")
+
     """
     A stateful test (also rule-based state machine or model-based test).
     """
@@ -52,10 +55,10 @@ class MySrvTestHttp(RuleBasedStateMachine):
     def _clear(self):
         requests.get(f"http://localhost:5000/clear")
 
-    @rule(book_data=some_book_data)
+    @rule(book_data=some_book_data, target=created_books)
     def new_book(self, book_data: BookData):
         # Execute action
-        requests.post(
+        res = requests.post(
             f"http://localhost:5000/books",
             json={
                 "title": book_data.title,
@@ -63,9 +66,16 @@ class MySrvTestHttp(RuleBasedStateMachine):
                 "read": False
             },
         )
+        created_book = res.json()["book"]
 
         # State transition
         self.book_count += 1
+
+        # Save the created book id into the Bundle.
+        # The mechanism is that because we declared (in the decorator above)
+        # that the "target" is created_books - the return value will be placed
+        # into the created_books Bundle.
+        return created_book["id"]
 
     @rule()
     def list_books(self):
@@ -75,6 +85,18 @@ class MySrvTestHttp(RuleBasedStateMachine):
 
         # Post-condition
         assert len(book_list_from_server) == self.book_count
+    
+    # The rule here states that the parameter created_book should be taken
+    # from the Bundle "created_books".
+    @rule(created_book_id=created_books)
+    def delete_book(self, created_book_id):
+        # Execute action
+        requests.delete(
+            f"http://localhost:5000/books/{created_book_id}",
+        )
+
+        # State transition
+        self.book_count -= 1
 
 
 MySrvTestHttp.TestCase.settings = settings(
