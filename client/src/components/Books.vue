@@ -233,6 +233,13 @@ export default {
           // eslint-disable-next-line
           console.error(error);
           this.getBooks();
+
+          if (error.response) {
+            this.message = error.response.data;
+          } else {
+            this.message = error.message;
+          }
+          this.showMessage = true;
         });
     },
     onResetUpdate(evt) {

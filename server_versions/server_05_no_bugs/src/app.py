@@ -3,6 +3,7 @@ import uuid
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+
 BOOKS_DEFAULT_LIST = [
     {
         'id': uuid.uuid4().hex,
@@ -67,12 +68,19 @@ def clear():
 @app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
 def single_book(book_id):
     response_object = {'status': 'success'}
+
+    # Update book.
     if request.method == 'PUT':
         print("book_id:" + book_id)
         post_data = request.get_json()
-        _remove_book(book_id)
-        _add_book(post_data, book_id)
-        response_object['message'] = 'Book updated!'
+        if _remove_book(book_id):
+            _add_book(post_data, book_id)
+            response_object['message'] = 'Book updated!'
+        else:
+            print("Book doesn't exist, can't update!")
+            return "Book doesn't exist, can't update!", 400
+    
+    # Delete book.
     if request.method == 'DELETE':
         _remove_book(book_id)
         response_object['message'] = 'Book removed!'
@@ -96,8 +104,7 @@ def _add_book(post_data, _id=None):
 
 def _book_from_post_data(post_data, _id=None):
     if not _id:
-        # _id = uuid.uuid4().hex
-        _id = post_data.get('title')
+        _id = uuid.uuid4().hex
     return _mk_book(
         _id=_id,
         title=post_data.get('title'),

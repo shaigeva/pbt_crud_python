@@ -4,8 +4,12 @@
 <br/>
 <br/>
 
-# NOTE - THIS IS WORK IN PROGRESS, ONLY THE 1ST VERSION ACTUALLY WORKS.
-
+# NOTE - THIS IS WORK IN PROGRESS
+The examples in the repo work, but there are some things missing:
+- Documentation needs some improvements.
+- Code cleanup is still necessary.
+- Mostly - this repo is actually a companion to a blog post explaining this
+  technique, and the blog post has not been published yet.
 
 
 
