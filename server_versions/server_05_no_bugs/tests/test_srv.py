@@ -1,9 +1,9 @@
-from dataclasses import dataclass
-
 import hypothesis.strategies as some
 import requests
 from hypothesis import settings
 from hypothesis.stateful import Bundle, RuleBasedStateMachine, initialize, rule
+
+URL = "http://localhost:5000"
 
 ####################################################################################
 # hypothesis strategies:
@@ -14,16 +14,7 @@ non_empty_names = names\
     .map(lambda s: s.strip())\
     .filter(lambda s: len(s) > 0)
 some_book_data = some.tuples(non_empty_names, non_empty_names)\
-    .map(lambda tup: BookData(title=tup[0], author=tup[1]))
-
-
-####################################################################################
-# Helper data classes:
-@dataclass
-class BookData(object):
-    title: str
-    author: str
-
+    .map(lambda tup: { "title": tup[0], "author": tup[1], "read": False })
 
 ####################################################################################
 # Test model
@@ -41,7 +32,6 @@ class MySrvTestHttp(RuleBasedStateMachine):
     """
     def __init__(self):
         super(MySrvTestHttp, self).__init__()
-        self.host = "http://localhost:5000"
 
         self.book_count = 0
         self.deleted_books = []
@@ -54,19 +44,12 @@ class MySrvTestHttp(RuleBasedStateMachine):
         self._clear()
 
     def _clear(self):
-        requests.get(f"http://localhost:5000/clear")
+        requests.get(f"{URL}/clear")
 
     @rule(book_data=some_book_data, target=created_books)
-    def new_book(self, book_data: BookData):
+    def new_book(self, book_data):
         # Execute action
-        res = requests.post(
-            f"http://localhost:5000/books",
-            json={
-                "title": book_data.title,
-                "author": book_data.author,
-                "read": False
-            },
-        )
+        res = requests.post(f"{URL}/books", json=book_data)
         created_book = res.json()["book"]
 
         # State transition
@@ -81,7 +64,7 @@ class MySrvTestHttp(RuleBasedStateMachine):
     @rule()
     def list_books(self):
         # Execute action
-        res = requests.get(f"http://localhost:5000/books")
+        res = requests.get(f"{URL}/books")
         book_list_from_server = res.json()["books"]
 
         # Post-condition
@@ -92,9 +75,7 @@ class MySrvTestHttp(RuleBasedStateMachine):
     @rule(created_book_id=created_books)
     def delete_book(self, created_book_id):
         # Execute action
-        requests.delete(
-            f"http://localhost:5000/books/{created_book_id}",
-        )
+        requests.delete(f"{URL}/books/{created_book_id}")
 
         # State transition
         if created_book_id not in self.deleted_books:
@@ -106,15 +87,8 @@ class MySrvTestHttp(RuleBasedStateMachine):
     # existing book with.
     @rule(created_book_id=created_books, override_book_data=some_book_data)
     def update_book(self, created_book_id, override_book_data):
-        requests.put(
-            f"http://localhost:5000/books/{created_book_id}",
-            json={
-                "id": created_book_id,
-                "title": override_book_data.title,
-                "author": override_book_data.author,
-                "read": False
-            },
-        )
+        override_book_data["id"] = created_book_id
+        requests.put(f"{URL}/books/{created_book_id}", json=override_book_data)
 
 MySrvTestHttp.TestCase.settings = settings(
     max_examples=50,
