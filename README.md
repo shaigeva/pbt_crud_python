@@ -55,9 +55,13 @@ version, but with the correct code.
 
 # How to run
 ## Run the client frontend
-(start at repository root directory)
+Prerequisite: **have nvm installed**.
+
+Start at repository root directory, and:
+
 ```sh
 $ cd client
+$ nvm use
 $ npm install
 $ npm run serve
 ```

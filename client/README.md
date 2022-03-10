@@ -1,6 +1,14 @@
 # client
 
+
+
 ## Project setup
+Install nvm
+
+```
+nvm use
+```
+
 ```
 npm install
 ```
