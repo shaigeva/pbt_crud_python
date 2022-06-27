@@ -11,8 +11,10 @@ mock = "*"
 hypothesis = "*"
 
 [packages]
-Flask = "==1.0.2"
-Flask-Cors = "==3.0.7"
+Flask = "*"
+# Flask = "==1.0.2"
+Flask-Cors = "*"
+# Flask-Cors = "==3.0.7"
 requests = "*"
 
 
