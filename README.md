@@ -92,7 +92,7 @@ cd server_versions/server_01_incorrect_id
 ```
 (or any of the other directories under `server_versions`)<br>
 
-Note: the server serves on port 5000.
+Note: the server serves on port 5001 (why? because there's a conflict with apple AirPlay)
 
 ## Run the tests
 ```sh
