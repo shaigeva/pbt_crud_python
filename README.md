@@ -60,10 +60,10 @@ Prerequisite: **have nvm installed**.
 Start at repository root directory, and:
 
 ```sh
-$ cd client
-$ nvm use
-$ npm install
-$ npm run serve
+cd client
+nvm use
+npm install
+npm run serve
 ```
 Point your browser to http://localhost:8080
 
